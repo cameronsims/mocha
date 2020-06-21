@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <title>MOCHA Structs</title>
+    </head>
+    <body>
+        <div class="m-header">Mocha - Structs & Classes</div>
+        <div class="m-content">
+        
+            <div class="m-class-cnt">
+                <div class="m-header">PAIR</div>
+                <div class="m-code">
+                    // pair struct example<br/>
+                    mocha::pair&lt;char, float&gt; p;<br/>
+                    p['c'] = 12.5f;
+                </div>
+                <div>
+                    The Pair struct is like the <i>std</i>::<b>pair</b> of the standard library.<br/>
+                    However, it is also called "<i>mocha</i>::<b>tuple</b>" as a retcon from 
+                        another struct from the standard library of the same name.
+                </div>
+            </div>
+            
+            <div class="m-class-cnt">
+                <div class="m-header">TIMER</div>
+                <div class="m-code">
+                    // Timer struct example<br/>
+                    float get_time() {
+                    &nbsp;&nbsp;&nbsp;&nbsp;mocha::Timer timer(false);<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;float time;<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timer.reset();<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time = timer.get();<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return time;<br/>
+                    }
+                </div>
+                <div>
+                    The Timer struct is like the a Timing class used for 
+                        debugging and checking time passed.
+                </div>
+            </div>
+            
+            <div class="m-class-cnt">
+                <div class="m-header">MAP</div>
+                <div class="m-code">
+                    // map struct example<br/>
+                    mocha::map&lt;const char*, unsigned int&gt; m(5);<br/>
+                    m["data"] = 256;<br/>
+                </div>
+                <div>
+                    The Map struct is like the <i>std</i>::<b>map</b> of the standard library<br/>
+                    It is not dynamic memory, instead it is static memory.
+                </div>
+            </div>
+            
+            <div class="m-class-cnt">
+                <div class="m-header">VECTOR</div>
+                <div class="m-code">
+                    // vector example<br/>
+                    mocha::vector&lt;int&gt; vec;<br/>
+                    vec = { 0, 1, 2 };<br/>
+                    vec.push(3);<br/>
+                </div>
+                <div>
+                    The Vector struct is used as a dynamic array, it can be changed during runtime
+                </div>
+            </div>
+            
+            <div class="m-class-cnt">
+                <div class="m-header">VECTOR2 and VECTOR3</div>
+                <div class="m-header-warn">Not to be confused with the dynamic array</div>
+                <div class="m-code">
+                    // vector 2 & 3 example<br/>
+                    mocha::vector2 v2(0.0f, 100.0f);<br/>
+                    mocha::vector3 v3(0.0f, 100.0f, 200.f);
+                </div>
+                <div>
+                    The Vector struct is used to represent 2D and 3D positions.
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>
