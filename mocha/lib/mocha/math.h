@@ -1,5 +1,7 @@
 /* math.h
- * * mocha::add()
+ * * mocha::min()
+ * * mocha::max()
+ * * mocha::abs()
  */
 #pragma once
 #include "mocha.h"
