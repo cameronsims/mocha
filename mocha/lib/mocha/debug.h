@@ -1,18 +1,17 @@
-/* debug.h */
+/* debug.h 
+ *
+ */
 #pragma once
+#define MOCHA_DEBUG true
 #include "mocha.h"
-#include "console.h"
+#include <stdio.h>
 #include <malloc.h>
-
-#define mocha_debug true
-
-#ifdef mocha_debug
 void* operator new(size_t s) {
-	mocha::clog << "[mocha]: New Allocation of " << (char*)s << " bytes.\n";
-	malloc(s);
+	printf("[mocha]: New Allocation of %d bytes.\n", s);
+	return malloc(s);
 }
 void operator delete(void* b) {
-	mocha::clog << "[mocha]: Deleted Object Allocation\n";
+	printf("[mocha]: Deleted Object Allocation\n");
 	free(b);
 }
-#endif
+namespace mocha {}
