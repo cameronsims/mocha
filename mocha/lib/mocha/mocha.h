@@ -51,28 +51,21 @@ namespace mocha {
     class exception {
       protected:
         static size_t iterations;
-        const char* what;
+        const char*   what;
       public:
-        exception(                )           noexcept { iterations++; };
-        exception(const exception&)           noexcept { iterations++; };
-        explicit exception(const char* _what) noexcept 
-            : what(_what)
-        {
+        exception(                ) = delete;
+        exception(const exception&) noexcept { };
+        explicit exception(const char* _what) 
+            : what(_what) 
+        { 
             #ifdef MOCHA_DEBUG
-            printf("[mocha]: \"Exception created!\"\n");
+            printf("[mocha]: Exception created!\n");
             #endif
-            iterations++;
-        }
-        ~exception() {
-            #ifdef MOCHA_DEBUG
-            printf("[mocha]: \"Exception removed!\"\n");
-            #endif
-        }
-        
-        void operator= (const exception& _r) { what = _r.what; }
-
-        const char*   reason() { return what; }
-        static size_t amount() { return iterations; }
+            iterations++; 
+        };
+        virtual ~exception();
+        const char*    reason() { return what; }
+        static size_t& amount() { return iterations; }
     };
 }
 
