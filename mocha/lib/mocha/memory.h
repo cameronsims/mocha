@@ -281,7 +281,8 @@ namespace mocha {
             : ptr(_ptr)
         {  }
         ~smart_ptr() { delete ptr; }
-        const T* data      (               ) const noexcept { return ptr; }
+        void     null      (               )       noexcept {         ptr = nullptr; }
+        const T* data      (               ) const noexcept { return  ptr; }
               T  operator* (               ) const          { return *ptr       ; }
               T* operator->(               ) const          { return  ptr       ; }
               T& operator+ (const size_t _i) const          { return  ptr +  _i ; }
@@ -300,11 +301,13 @@ namespace mocha {
     template<typename T>
     class shared_ptr : public mocha::smart_ptr<T> {
     protected:
-        T* ptr;
+        const T* ptr = nullptr;
         mocha::shared_ptr<T>* parent = nullptr;
         mutable unsigned int count{};
     public:
-        explicit shared_ptr(T* _ptr) 
+                 shared_ptr() = default;
+                 shared_ptr(const shared_ptr<T>&  _ptr);
+        explicit shared_ptr(T*                    _ptr) 
             : ptr(_ptr)
         {}
         explicit shared_ptr(mocha::shared_ptr<T>& _ptr) 

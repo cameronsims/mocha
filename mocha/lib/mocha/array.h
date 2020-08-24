@@ -20,10 +20,10 @@ namespace mocha {
         constexpr size_t size()  const noexcept { return S; }
         constexpr size_t bytes() const noexcept { return S * sizeof(T); }
 
-        iterator<T>&       begin()       { return iterator<T>(arr); }
-        iterator<T>&         end()       { return iterator<T>(arr + S); }
-        const_iterator<T>& begin() const { return const_iterator<T>(arr); }
-        const_iterator<T>&   end() const { return const_iterator<T>(arr + S); }
+              MOCHA       iterator<T> begin()       { return       iterator<T>(arr[0]); }
+              MOCHA       iterator<T>   end()       { return       iterator<T>(arr[S]); }
+        const MOCHA const_iterator<T> begin() const { return const_iterator<T>(arr[0]); }
+        const MOCHA const_iterator<T>   end() const { return const_iterator<T>(arr[S]); }
 
               T* data()       { return arr; }
         const T* data() const { return arr; }
@@ -50,7 +50,7 @@ namespace mocha {
             }
         }
         template<size_t PS>
-        void set(const mocha::array<T, S> _arr) {
+        void set(const MOCHA array<T, S> _arr) {
             for (size_t i = 0; i < S; i++) {
                 arr[i] = _arr[i];
             }
@@ -60,7 +60,7 @@ namespace mocha {
         array(const T*                          _arr) { set(_arr, S); }
         array(const std::initializer_list<T>&   _arr) { set(_arr); }
         template<typename PT, size_t PS>
-        array(const mocha::array<PT, PS>&        _arr) {
+        array(const MOCHA array<PT, PS>&        _arr) {
             set(_arr.data(), _arr.size());
         }
 
@@ -70,6 +70,6 @@ namespace mocha {
         template<typename PT>
         void     operator= (const PT                      _arr[]) { set(_arr); }
         template<size_t S>
-        void     operator= (const mocha::array<T, S>        _arr) { set(_arr); }
+        void     operator= (const MOCHA array<T, S>        _arr) { set(_arr); }
     };
 }

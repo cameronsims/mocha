@@ -5,7 +5,7 @@
  * * mocha::exception()
  */
 #pragma once
-#define MOCHA true
+#define MOCHA mocha::
 namespace mocha {
     /* mocha::size_t */
     typedef unsigned int size_t;

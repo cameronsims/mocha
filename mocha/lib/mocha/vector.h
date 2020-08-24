@@ -16,8 +16,7 @@ namespace mocha {
         static size_t iterations;
         const char* what;
     public:
-                 
-                 out_of_range(const mocha::out_of_range&) noexcept {};
+        out_of_range(const MOCHA out_of_range&) noexcept {};
         out_of_range()
             : what("Vector has gone out of Size Range") {
         #ifdef MOCHA_DEBUG
@@ -46,7 +45,7 @@ namespace mocha {
                 this->realloc(_i);
             }
             if (_i >= elemsize) {
-                throw mocha::out_of_range();
+                elemsize += _i - elemsize;
             }
         }
       private:
@@ -54,8 +53,8 @@ namespace mocha {
             T* temp = new T[resolution];
             for (size_t i = 0; i < resolution; i++)
                 temp[i] = arr[i];
-            this->resolution = _s + 8;
             delete[] arr;
+            this->resolution = _s + 8;
             arr = new T[resolution];
             for (size_t i = 0; i < resolution; i++)
                 arr[i] = temp[i];
@@ -63,18 +62,20 @@ namespace mocha {
             delete[] temp;
         }
       public:
-        size_t                  size (          ) const noexcept { return this->elemsize; }
-        size_t                  res  (          ) const noexcept { return this->resolution; }
-        size_t                  bytes(          ) const noexcept { return this->resolution * sizeof(T); }
-              T*                data (          )                { return arr; }
-        const T*                data (          ) const          { return arr; }
-                    iterator<T> begin(          )       noexcept { return       iterator<T>(arr); }
-                    iterator<T> end  (          )       noexcept { return       iterator<T>(arr +elemsize -1); }
-        const const_iterator<T> begin(          ) const noexcept { return const_iterator<T>(arr); }
-        const const_iterator<T> end  (          ) const noexcept { return const_iterator<T>(arr +elemsize -1); }
-             T*                 push (      T _d)                { check(elemsize + 1); arr[elemsize++] = _d; return arr; }
-             T*                 pop  (          )                { arr[elemsize - 1] = T{}; elemsize = elemsize -1;                 return arr; }
-             T*                 clear(          )                { delete[] arr;            elemsize = 0;           resolution = 8; return arr = new T[8]; }
+        size_t                        size (          ) const noexcept { return this->elemsize; }
+        size_t                     capacity(          ) const noexcept { return this->resolution; }
+        size_t                        bytes(          ) const noexcept { return this->resolution * sizeof(T); }
+              T*                      data (          )                { return arr; }
+        const T*                      data (          ) const          { return arr; }
+
+              MOCHA       iterator<T> begin(          )       noexcept { return MOCHA       iterator<T>(arr[0]); }
+              MOCHA       iterator<T> end  (          )       noexcept { return MOCHA       iterator<T>(arr[elemsize]); }
+        const MOCHA const_iterator<T> begin(          ) const noexcept { return MOCHA const_iterator<T>(arr[0]); }
+        const MOCHA const_iterator<T> end  (          ) const noexcept { return MOCHA const_iterator<T>(arr[elemsize]); }
+
+              T*                      push (T       _d)                { check(elemsize);         arr[elemsize++] = _d;                   return arr; }
+              T*                      pop  (          )                { arr[elemsize - 1] = T{}; elemsize = elemsize -1;                 return arr; }
+              T*                      clear(          )                { delete[] arr;            elemsize = 0;           resolution = 8; return arr = new T[8]; }
 
               T& operator[](const size_t& _i)       { check(_i); return arr[_i]; }
         const T& operator[](const size_t& _i) const { check(_i); return arr[_i]; }
@@ -99,13 +100,13 @@ namespace mocha {
             }
         }
         template<size_t PS>
-        void set(const mocha::array<T, PS>& _arr) {
+        void set(const MOCHA array<T, PS>& _arr) {
             for (size_t i = 0; i < PS; i++) {
                 arr[i] = _arr[i];
             }
         }
         template<size_t PX, size_t PY>
-        void set(const mocha::darray<T, PX, PY>& _arr) {
+        void set(const MOCHA darray<T, PX, PY>& _arr) {
             for (size_t i = 0; i < PX * PY; i++) {
                 arr[i] = _arr[i];
             }
@@ -125,13 +126,13 @@ namespace mocha {
             }
         }
         template<size_t PS>
-        vector(mocha::array<T, PS>& _arr) {
+        vector(MOCHA array<T, PS>& _arr) {
             for (int i = 0; i < PS; i++) {
                 arr[i] = _arr[i];
             }
         }
         template<size_t PX, size_t PY>
-        vector(mocha::darray<T, PX, PY>& _arr) {
+        vector(MOCHA darray<T, PX, PY>& _arr) {
             for (int i = 0; i < PX * PY; i++) {
                 arr[i] = _arr[i];
             }
@@ -146,4 +147,4 @@ namespace mocha {
         ~vector() { delete[] arr; }
     };
 }
-size_t mocha::out_of_range::iterations = 0;
+size_t MOCHA out_of_range::iterations = 0;

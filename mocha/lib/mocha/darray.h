@@ -24,10 +24,10 @@ namespace mocha {
                   T*     data (                               )                { return arr; }
         const     T*     data (                               ) const          { return arr; }
 
-                    iterator<T>& begin(                       )       noexcept { return iterator<T>      (arr); }
-                    iterator<T>&   end(                       )       noexcept { return iterator<T>      (arr + (X*Y)); }
-        const const_iterator<T>& begin(                       ) const noexcept { return const_iterator<T>(arr); }
-        const const_iterator<T>&   end(                       ) const noexcept { return const_iterator<T>(arr + (X*Y)); }
+              MOCHA       iterator<T>  begin(                       )       noexcept { return MOCHA       iterator<T>(arr[0]); }
+              MOCHA       iterator<T>    end(                       )       noexcept { return MOCHA       iterator<T>(arr[X*Y]); }
+        const MOCHA const_iterator<T>  begin(                       ) const noexcept { return MOCHA const_iterator<T>(arr[0]); }
+        const MOCHA const_iterator<T>    end(                       ) const noexcept { return MOCHA const_iterator<T>(arr[X*Y]); }
         
         void set(const T _val) {
             size_t i{};
@@ -64,9 +64,9 @@ namespace mocha {
         void     operator= (const std::initializer_list<T>& _arr) { set(_arr); }
         void     operator= (const T                       _arr[]) { set(_arr); }
         template<size_t S>
-        void     operator= (const mocha::array<T, S>        _arr) { set(_arr); }
+        void     operator= (const MOCHA array<T, S>        _arr) { set(_arr); }
         template<size_t X, size_t Y>
-        void     operator= (const mocha::darray<T, X, Y>    _arr) { set(_arr); }
+        void     operator= (const MOCHA darray<T, X, Y>    _arr) { set(_arr); }
               T& operator()(const size_t& _x, const size_t& _y)                { return arr[(_y * X) + _x]; }
         const T& operator()(const size_t& _x, const size_t& _y) const          { return arr[(_y * X) + _x]; }
               T& operator[](const size_t& _i                  )                { return arr[_i]; }
@@ -86,7 +86,7 @@ namespace mocha {
                 arr[i] = (T)t;
             }
         }
-        darray(mocha::darray<T, X, Y>& _arr) {
+        darray(MOCHA darray<T, X, Y>& _arr) {
             for (int i = 0; i < X + Y; i++) {
                 arr[i] = _arr[i];
             }
