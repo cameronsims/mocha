@@ -24,10 +24,15 @@ namespace mocha {
                   T*     data (                               )                { return arr; }
         const     T*     data (                               ) const          { return arr; }
 
-              MOCHA       iterator<T>  begin(                       )       noexcept { return MOCHA       iterator<T>(arr[0]); }
-              MOCHA       iterator<T>    end(                       )       noexcept { return MOCHA       iterator<T>(arr[X*Y]); }
-        const MOCHA const_iterator<T>  begin(                       ) const noexcept { return MOCHA const_iterator<T>(arr[0]); }
-        const MOCHA const_iterator<T>    end(                       ) const noexcept { return MOCHA const_iterator<T>(arr[X*Y]); }
+              MOCHA               iterator<T>  begin(                       )       noexcept { return MOCHA               iterator<T>(arr[0]); }
+              MOCHA               iterator<T>    end(                       )       noexcept { return MOCHA               iterator<T>(arr[X*Y]); }
+        const MOCHA         const_iterator<T>  begin(                       ) const noexcept { return MOCHA         const_iterator<T>(arr[0]); }
+        const MOCHA         const_iterator<T>    end(                       ) const noexcept { return MOCHA         const_iterator<T>(arr[X*Y]); }
+
+              MOCHA       reverse_iterator<T> rbegin(                       )       noexcept { return MOCHA       reverse_iterator<T>(arr[(X * Y) -1]); }
+              MOCHA       reverse_iterator<T>   rend(                       )       noexcept { return MOCHA       reverse_iterator<T>(arr[-1]); }
+        const MOCHA const_reverse_iterator<T> rbegin(                       ) const noexcept { return MOCHA const_reverse_iterator<T>(arr[(X * Y) -1]); }
+        const MOCHA const_reverse_iterator<T>   rend(                       ) const noexcept { return MOCHA const_reverse_iterator<T>(arr[-1]); }
         
         void set(const T _val) {
             size_t i{};

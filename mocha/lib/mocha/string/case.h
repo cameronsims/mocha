@@ -4,7 +4,6 @@
  */
 #pragma once
 #include "../mocha.h"
-#include "../generic/string.h"
 namespace mocha {
     /* mocha::lowercase() */
     /*std::string lowercase(const char* s) {

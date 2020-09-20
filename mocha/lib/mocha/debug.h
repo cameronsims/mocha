@@ -16,7 +16,7 @@ void* operator new(const mocha::size_t _size) {
 	printf("[mocha]: New Allocation of %d bytes. (%p)\n", _size, &data);
 	return data;
 }
-void operator delete(void* _data) {
+void  operator delete(void* _data) {
 	printf("[mocha]: Deleted Allocation. (%p)\n", &_data);
 	free(_data);
 }
@@ -25,7 +25,7 @@ void* operator new[](const mocha::size_t _size) {
 	printf("[mocha]: New Array Allocation of %d bytes. (%p)\n", _size, &data);
 	return data;
 }
-void operator delete[](void* _data) {
+void  operator delete[](void* _data) {
 	printf("[mocha]: Deleted Array Allocation. (%p)\n", &_data);
 	free(_data);
 }

@@ -14,6 +14,7 @@
 #pragma once
 #define MOCHA_MEMORY true
 #include "mocha.h"
+#include "time.h"
 namespace mocha {
     /* mocha::addressof()
      * * TEMPLATE: { "T": "Typename to Use" }
@@ -300,11 +301,11 @@ namespace mocha {
     /* mocha::shared_ptr */
     template<typename T>
     class shared_ptr : public mocha::smart_ptr<T> {
-    protected:
+      protected:
         const T* ptr = nullptr;
         mocha::shared_ptr<T>* parent = nullptr;
         mutable unsigned int count{};
-    public:
+      public:
                  shared_ptr() = default;
                  shared_ptr(const shared_ptr<T>&  _ptr);
         explicit shared_ptr(T*                    _ptr) 
@@ -319,5 +320,22 @@ namespace mocha {
         }
         const bool unique = true;
         const size_t& useCount() const { return count; }
+    };
+
+    /* mocha::shared_ptr */
+    template<typename T>
+    class timed_ptr : public mocha::smart_ptr<T> {
+      protected:
+        T* ptr = nullptr;
+        time_t begint;
+      public:
+        timed_ptr() = default;
+        explicit timed_ptr(T* _ptr)
+            : ptr(_ptr)
+        {
+            this->start();
+        }
+        time_t start() { return begint = ::time(0); }
+        time_t time () { return begint; }
     };
 }

@@ -1,41 +1,30 @@
 /* sort.h
+ * * mocha::sort_c
  * * mocha::sort()
  */
 #pragma once
 #define MOCHA_SORT true
 #include "mocha.h"
-#ifdef MOCHA_MATH
 #include "math.h"
-#endif
 #include "memory.h"
-#include "array.h"
-#include "darray.h"
+#include "iterator.h"
 namespace mocha {
-    /* defined in <mocha/math.h> */
-    float ceil (const float);
-    float floor(const float);
-    template<typename T>
-    bool  even (const T);
-
     /* mocha::sort_c:::get() */
     class sort_c {
         // VARIABLES AND FUNCTIONS
       public:
         /* mocha::sort_c::algorithms */
-        enum class algorithm : unsigned int { 
-            BUBBLE = 0,
-            SELECTION,
-            INSERTION
+        enum algorithm : unsigned int { 
+            algorithmBUBBLE = 0,
+            algorithmSELECTION,
+            algorithmINSERTION
         };
           
-        /* mocha::sort_c::reverse */
-        static bool reverse;
-
         /* mocha::sort_c::instance */
         const static sort_c instance;
 
         /* mocha::sort::mode */
-        mutable algorithm mode = algorithm::BUBBLE;
+        mutable algorithm mode = algorithmINSERTION;
 
         /* mocha::sort_c::bubble()
          * * TYPENAME: { "T": "Typename to use" }
@@ -45,10 +34,10 @@ namespace mocha {
          */
         template<typename T>
         const sort_c& bubble     (T* _arr, const size_t _i, const size_t _n) const {
-            for (int i = _i; i < _n; i++)
+            for (int i = _i; i < _n;       i++) 
             for (int j = _i; j < _n -i -1; j++) {
                 if (_arr[j] > _arr[j + 1])
-                    swap(&_arr[j], &_arr[j +1]);
+                    MOCHA swap(&_arr[j], &_arr[j +1]);
             }
             return instance;
         }
@@ -63,7 +52,22 @@ namespace mocha {
             for (int i = _i; i < _n; i++)
             for (int j = _i +1; j < _n; j++) {
                 if (_arr[j] < _arr[j +1])
-                    swap(&_arr[j], &_arr[j +1]);
+                    MOCHA swap(&_arr[j], &_arr[j +1]);
+            }
+            return instance;
+        }
+        /* mocha::sort_c::bubble()
+         * * TYPENAME: { "IT": "Iterator to use" }
+         * * "_begin": "Beginning of Container"
+         * * "_end"  : "Ending of Container"
+         * * "_func" : "Function that compares values of comparing iterators"
+         */
+        template<class IT, typename FUNC>
+        const sort_c& bubble(IT& _begin, IT& _end, FUNC& func/*void(*func)(IT&, IT&)*/) const {
+            for (IT i = _begin; i < _end; ++i)
+            for (IT j = _begin; j < i;    ++j) {
+                if (func(i, j))
+                    MOCHA swap(*i, *j);
             }
             return instance;
         }
@@ -149,67 +153,59 @@ namespace mocha {
         }
         
         // CONSTRUCTORS AND DESTRUCTORS
-        sort_c(            ) {}
+        sort_c(              ) = default;
         sort_c(const sort_c& ) = delete;
         sort_c(const sort_c&&) = delete;
 
         template<typename T>
-        const sort_c& run(T* _arr, const size_t _first, const size_t _size, const bool _rev = reverse) const {
+        void operator()(T* const _arr, const size_t _first, const size_t _size, const bool _rev = false) const { 
+            size_t len = _size - _first;
             switch (mode) {
-                case algorithm::BUBBLE: {
-                    return (_rev)
-                        ? bubbler(_arr, _first, _size)
-                        : bubble (_arr, _first, _size);
+                case algorithmBUBBLE: { 
+                    (!_rev) 
+                      ? this->bubble (_arr, 0, len)
+                      : this->bubbler(_arr, 0, len); 
                 }
-                case algorithm::SELECTION: {
-                    return (_rev)
-                        ? selectionr(_arr, _first, _size)
-                        : selection (_arr, _first, _size);
+                case algorithmINSERTION:
+                {
+                    (!_rev)
+                        ? this->insertion (_arr, 0, len)
+                        : this->insertionr(_arr, 0, len);
                 }
-                case algorithm::INSERTION: {
-                    return (_rev)
-                        ? insertionr(_arr, _first, _size)
-                        : insertion (_arr, _first, _size);
+                case algorithmSELECTION:
+                {
+                    (!_rev)
+                        ? this->selection (_arr, 0, len)
+                        : this->selectionr(_arr, 0, len);
                 }
-
-                default: throw exception("MOCHA SORTING ALGORITHM NOT KNOWN!");
             }
-        }
-
-        template<typename T>
-        T* operator()(T* _arr, const size_t _first, const size_t _size, const bool _rev = reverse) const {
-            size_t len = _size - _first,
-                i{};
-            run(_arr, _first, _size +_first, _rev);
-            return _arr;
-        }
-        template<typename T>
-        T* operator()(const T* _arr, const size_t _first, const size_t _size, const bool _rev = reverse) const { 
-            size_t len = _size - _first,
-                   i{};
-            T* arr = new T[len];
-            while (i < len) {
-                arr[i] = _arr[i];
-                i++;
-            }
-            run(arr, _first, _size +_first, _rev);
-            return arr;
         }
     };
 
-    template<typename T>
-    const T* sort(const T* _arr, const size_t _first, const size_t _size, const bool _rev = mocha::sort_c::reverse) { return mocha::sort_c::instance(_arr, _first, _size, _rev); };
-    template<typename T>
-    T* sort(T* _arr, const size_t _first, const size_t _size, const bool _rev = mocha::sort_c::reverse) { return mocha::sort_c::instance(_arr, _first, _size, _rev); };
-    const mocha::sort_c& sort(const mocha::sort_c::algorithm _alg) { 
-        mocha::sort_c::instance.mode = _alg; 
-        return mocha::sort_c::instance;
+    void                sort(MOCHA sort_c::algorithm _alg) {
+        MOCHA sort_c::instance.mode = _alg;
     }
-    const mocha::sort_c& sort(const bool _bl) {
-        mocha::sort_c::instance.reverse = _bl;
-        return mocha::sort_c::instance;
-    }
-}
+    template<typename T>
+    void                sort(T* _arr, const size_t _first, const size_t _size, const bool _rev = false) { 
+        MOCHA sort_c::instance(_arr, _first, _size, _rev); 
+    };
+    
+    template<class IT>
+    void                sort(IT _first, IT _last) {
+        struct {
+            bool operator()(IT& a, IT& b) const { return *a < *b; }
+        } default_compare;
 
-const mocha::sort_c mocha::sort_c::instance;
-bool mocha::sort_c::reverse = false;
+        switch (MOCHA sort_c::instance.mode) {
+            case MOCHA sort_c::algorithmBUBBLE: { MOCHA sort_c::instance.bubble(_first, _last, default_compare); }
+        }
+    }
+    template<class IT, class FUNC>
+    void                sort(IT _first, IT _last, FUNC& func) {
+        switch (MOCHA sort_c::instance.mode) {
+            case MOCHA sort_c::algorithmBUBBLE: { MOCHA sort_c::instance.bubble(_first, _last, func); }
+        }
+    }
+    
+}
+const MOCHA sort_c MOCHA sort_c::instance;

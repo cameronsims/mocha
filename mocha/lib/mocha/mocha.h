@@ -22,27 +22,16 @@ namespace mocha {
         while (_arr[l] != '\0') l++;
         return l;
     }   
-    size_t bytes(const char* _arr) {
-        return size(_arr) * sizeof(char);
-    }
-
+   
     #ifdef _ARRAY_
     template<typename T, const int l>
     size_t size(const std::array<T, l>& a) {
         return l;
     }
-    template<typename T, const int l>
-    size_t bytes(const std::array<T, l>& a) {
-        return l * sizeof(T);
-    }
     #ifdef _VECTOR_
     template<typename T>
     size_t size(const std::vector<T>& v) {
         return v.size();
-    }
-    template<typename T>
-    size_t bytes(const std::vector<T>& v) {
-        return v.size() * sizeof(T);
     }
     #endif
     #endif

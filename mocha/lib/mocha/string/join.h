@@ -3,7 +3,6 @@
  */
 #pragma once
 #include "../mocha.h"
-#include "../generic/string.h"
 #include <sstream>
 #include <vector>
 namespace mocha {
